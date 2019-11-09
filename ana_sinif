@@ -1,0 +1,107 @@
+package com.mycompany.k_java;
+
+import java.util.Random;
+
+public class ana_sinif {
+    	public static void main(String[] args) {
+		int data[]={6,7,-8,-12,6,7,40,4,34,34,12,9,0,34,70};
+		int k=3;//Küme sayısı belirledik
+            
+             int merkez[][]=new int[][]{
+			{0,0,0},
+			{1,20,40}
+		};//uc tane merkez noktası belirledik
+             
+             
+          
+		
+		merkez_hisapla(data,k,merkez);		
+	}
+	public static int[][] merkez_hisapla(int data[],int k,int merkez[][]){
+		
+		int uzaklik[][]=new int[k][data.length];
+		int kume[]=new int[data.length];
+		int kume_dugum_sayisi[]=new int[k];
+		
+		merkez[0]=merkez[1];
+		merkez[1]=new int[]{0,0,0};
+		System.out.println("========== yeni merkez noktalari elde etmek için basladi =========");
+		
+		for(int i=0;i<k;i++){
+			for(int j=0;j<data.length;j++){
+				uzaklik[i][j]=Math.abs(data[j]-merkez[0][i]);
+				System.out.print(uzaklik[i][j]+" ,");
+			}
+			System.out.println();
+		}
+		
+		for(int j=0;j<data.length;j++){
+			int en_kucuk_uzaklik=0;
+			if(uzaklik[0][j]<uzaklik[1][j] && uzaklik[0][j]<uzaklik[2][j])
+				en_kucuk_uzaklik=0;
+			if(uzaklik[1][j]<uzaklik[0][j] && uzaklik[1][j]<uzaklik[2][j])
+				en_kucuk_uzaklik=1;
+			if(uzaklik[2][j]<uzaklik[0][j] && uzaklik[2][j]<uzaklik[1][j])
+				en_kucuk_uzaklik=2;//
+			
+			merkez[1][en_kucuk_uzaklik]=merkez[1][en_kucuk_uzaklik]+data[j];
+			kume_dugum_sayisi[en_kucuk_uzaklik]=kume_dugum_sayisi[en_kucuk_uzaklik]+1;
+			kume[j]=en_kucuk_uzaklik;			                                                                    
+		}
+		
+		
+                System.out.println("======================================== ");
+		
+                System.out.println("yeni kumeler : ");
+              
+                 for(int i=0;i<k;i++){				
+		 System.out.print("C"+(i+1)+": ");
+                     for(int l=0;l<data.length;l++){
+					if(kume[l]==i)
+						System.out.print(data[l]+" ,");
+					
+				}
+				System.out.println();
+			}
+                System.out.println("======================================== ");
+			        
+		System.out.println("yeni merkez noktalari");
+		
+		for(int j=0;j<k;j++){
+			merkez[1][j]=merkez[1][j]/kume_dugum_sayisi[j];
+			System.out.print(merkez[1][j]+",");
+		}
+		System.out.println();
+	
+		boolean son_sonuc_tamam=true;
+		for(int j=0;j<k;j++){
+			if(son_sonuc_tamam && merkez[0][j] == merkez[1][j]){
+				son_sonuc_tamam=true;
+				continue;
+			}
+			son_sonuc_tamam=false;
+		}
+		
+		if(!son_sonuc_tamam){
+                    
+			merkez_hisapla(data,k,merkez);
+		}
+		
+		if(son_sonuc_tamam){
+			System.out.println("======================================== ");
+			System.out.println("Kumelerin son hali");
+			for(int i=0;i<k;i++){	
+                              System.out.print("C"+(i+1)+":");
+				for(int j=0;j<data.length;j++){
+					if(kume[j]==i)
+						System.out.print(data[j]+" ,");					
+				}
+				System.out.println();
+			}
+		}
+		
+		return merkez;
+		
+	}
+    
+}
